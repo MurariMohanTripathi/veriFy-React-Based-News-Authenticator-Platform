@@ -38,8 +38,9 @@ function Navbar() {
       {open && (
         <div className="md:hidden flex flex-col space-y-4 mt-4 bg-gray-800 p-4 rounded-lg shadow-lg">
           <a href="/" className="hover:text-blue-400 transition">Home</a>
-          <a href="/submit" className="hover:text-blue-400 transition">Submit News</a>
+          <a href="/submit-news" className="hover:text-blue-400 transition">Submit News</a>
           <a href="/fact-check" className="hover:text-blue-400 transition">Fact Check</a>
+          <a href="/community-voting" className="hover:text-blue-400 transition">Community voting</a>
           <a href="/about" className="hover:text-blue-400 transition">About</a>
         </div>
       )}

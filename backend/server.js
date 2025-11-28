@@ -1,22 +1,18 @@
-import dotenv from "dotenv";
 import express from "express";
-import mongoose from "mongoose";
+import dotenv from "dotenv";
+import cors from "cors";
+import connectDB from "./config/db.js";
+import newsRoutes from "./routes/newsRoutes.js";
 
 dotenv.config();
+connectDB();
 
 const app = express();
+app.use(express.json());
+app.use(cors());
 
-const PORT = process.env.PORT || 8000;
-const MONGO_URL = process.env.MONGODB_URI;
+// Routes
+app.use("/api/news", newsRoutes);
 
-mongoose.connect(MONGO_URL)
-  .then(() => console.log("Connected to DB successfully"))
-  .catch((error) => console.error(" DB connection error:", error));
-
-app.get('/', (req, res) => {
-  res.send('hello world');
-});
-
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on PORT: ${PORT}`);
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

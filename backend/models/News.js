@@ -10,7 +10,7 @@ const newsSchema = new mongoose.Schema(
       true: { type: Number, default: 0 },
       false: { type: Number, default: 0 },
       review: { type: Number, default: 0 },
-    },
+    }
   },
   { timestamps: true }
 );

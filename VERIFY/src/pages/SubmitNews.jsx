@@ -1,114 +1,102 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { submitNews } from "../services/backendAPI";
+import { motion } from "framer-motion";
+import { Send } from "lucide-react";
 
-const SubmitNews = () => {
-  const [formData, setFormData] = useState({
+export default function SubmitNews() {
+  const [form, setForm] = useState({
     title: "",
     url: "",
-    description: "",
     source: "",
+    submittedBy: ""
   });
 
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // TODO: send to backend / firebase
-    console.log("News submitted:", formData);
-
-    setSubmitted(true);
-    setFormData({
-      title: "",
-      url: "",
-      description: "",
-      source: "",
-    });
+    try {
+      await submitNews(form);
+      alert("News Submitted Successfully!");
+      setForm({ title: "", url: "", source: "", submittedBy: "" });
+    } catch (err) {
+      console.log("Submit Error:", err);
+    }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white px-4 py-10">
-      <div className="w-full max-w-2xl bg-black/40 backdrop-blur-md rounded-2xl shadow-xl p-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-blue-400 text-center mb-6">
-          📰 Submit Suspicious News
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex items-center justify-center p-6 text-white">
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-lg bg-gray-800/60 backdrop-blur-md shadow-xl rounded-2xl p-8 border border-gray-700"
+      >
+        <h1 className="text-3xl font-bold text-center mb-6">
+          📝 Submit News for Verification
         </h1>
-
-        {submitted && (
-          <p className="mb-4 text-green-400 text-center">
-            ✅ Thank you! Your submission has been recorded.
-          </p>
-        )}
+        <p className="text-gray-400 text-center mb-8">
+          Help the community verify questionable news by submitting it here.
+        </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Title */}
           <div>
-            <label className="block mb-1 text-sm font-medium">Headline / Title</label>
+            <label className="block mb-1 text-gray-300">News Title *</label>
             <input
               type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
+              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none"
+              placeholder="Enter headline"
+              value={form.title}
+              onChange={(e) => setForm({ ...form, title: e.target.value })}
               required
-              placeholder="Enter the headline"
-              className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           {/* URL */}
           <div>
-            <label className="block mb-1 text-sm font-medium">News URL</label>
+            <label className="block mb-1 text-gray-300">News URL (Optional)</label>
             <input
-              type="url"
-              name="url"
-              value={formData.url}
-              onChange={handleChange}
-              required
+              type="text"
+              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none"
               placeholder="https://example.com/article"
-              className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.url}
+              onChange={(e) => setForm({ ...form, url: e.target.value })}
             />
           </div>
 
           {/* Source */}
           <div>
-            <label className="block mb-1 text-sm font-medium">Source (optional)</label>
+            <label className="block mb-1 text-gray-300">Source / Platform</label>
             <input
               type="text"
-              name="source"
-              value={formData.source}
-              onChange={handleChange}
-              placeholder="e.g. Twitter, WhatsApp, News Site"
-              className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none"
+              placeholder="Twitter, Instagram, Website, etc."
+              value={form.source}
+              onChange={(e) => setForm({ ...form, source: e.target.value })}
             />
           </div>
 
-          {/* Description */}
+          {/* Submitted By */}
           <div>
-            <label className="block mb-1 text-sm font-medium">Description</label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              required
-              rows="4"
-              placeholder="Add context about why this news looks suspicious..."
-              className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <label className="block mb-1 text-gray-300">Your Name (Optional)</label>
+            <input
+              type="text"
+              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none"
+              placeholder="Anonymous"
+              value={form.submittedBy}
+              onChange={(e) => setForm({ ...form, submittedBy: e.target.value })}
             />
           </div>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full py-3 rounded-lg bg-blue-600 hover:bg-blue-700 transition font-semibold text-white shadow-lg"
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 transition px-6 py-3 rounded-xl font-semibold text-white shadow-lg"
           >
+            <Send className="w-5 h-5" />
             Submit News
-          </button>
+          </motion.button>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
-};
-
-export default SubmitNews;
+}

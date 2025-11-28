@@ -7,6 +7,7 @@ import Navbar from './components/Navbar';
 import FactCheck from './pages/FactCheck';
 import About from './pages/About';
 import CommunityVoting from './pages/CommunityVoting';
+import MyNewsPage from './pages/MyNewsPage';
 const App = () => {
   return (
     <>
@@ -20,6 +21,7 @@ const App = () => {
         <Route path='/fact-check' element={<FactCheck/>}/>
         <Route path='/about' element={<About/>}/>
         <Route path='/community-voting' element={<CommunityVoting/>}/>
+        <Route path='/News-Page' element={<MyNewsPage/>}/>
       </Routes>
     </div>
     </>
